@@ -1,22 +1,21 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { StudentsService } from './students.service';
-import { CreateStudentDto } from './dto/create-student.dto';
-import { mock } from 'node:test';
-import { create } from 'domain';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Student } from './entities/student.entity';
+import { Repository } from 'typeorm';
 import fc from 'fast-check';
 
 describe('StudentsService', () => {
   let service: StudentsService;
-  let mockRepo: any;
+  let mockRepo: jest.Mocked<Repository<Student>>;
 
   // 테스트하기 전의 세팅 작업
   beforeEach(async () => {
     mockRepo = {
       create: jest.fn(),
       save: jest.fn(),
-    };
+    } as unknown as jest.Mocked<Repository<Student>>;
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         StudentsService,
@@ -33,8 +32,12 @@ describe('StudentsService', () => {
       email: 'young40@naver.com',
       age: 27,
     };
-    mockRepo.create.mockReturnValue(createDto); //create 함수가 실행되면 createDto를 반환하도록 설정
-    mockRepo.save.mockResolvedValue({ ...createDto, id: 1, isActive: true }); // save 함수가 실행되면 promise 성공 케이스 돌려줌
+    mockRepo.create.mockReturnValue(createDto as Student); //create 함수가 실행되면 createDto를 반환하도록 설정
+    mockRepo.save.mockResolvedValue({
+      ...createDto,
+      id: 1,
+      isActive: true,
+    } as Student); // save 함수가 실행되면 promise 성공 케이스 돌려줌
 
     const result = await service.create(createDto);
 
@@ -51,12 +54,12 @@ describe('StudentsService', () => {
           age: fc.integer({ min: 0 }),
         }),
         async (createDto) => {
-          mockRepo.create.mockReturnValue(createDto);
+          mockRepo.create.mockReturnValue(createDto as Student);
           mockRepo.save.mockResolvedValue({
             ...createDto,
             id: 1,
             isActive: true,
-          });
+          } as Student);
 
           const result = await service.create(createDto);
 

@@ -24,7 +24,7 @@ export class StudentsService {
     return `학생 ${id}`;
   }
 
-  update(id: number, updateStudentDto: UpdateStudentDto) {
+  update(id: number) {
     return `This action updates a #${id} student`;
   }
 
