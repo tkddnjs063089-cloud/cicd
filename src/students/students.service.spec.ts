@@ -42,8 +42,8 @@ describe('StudentsService', () => {
     const result = await service.create(createDto);
 
     void expect(result).toEqual({ ...createDto, id: 1, isActive: true });
-    void expect(mockRepo.create).toHaveBeenCalledWith(createDto);
-    void expect(mockRepo.save).toHaveBeenCalledWith(createDto);
+    void expect(mockRepo.create.bind(mockRepo)).toHaveBeenCalledWith(createDto);
+    void expect(mockRepo.save.bind(mockRepo)).toHaveBeenCalledWith(createDto);
   });
   it('학생 생성 테스트 - 패스트 체크 버전', async () => {
     await fc.assert(
@@ -68,7 +68,9 @@ describe('StudentsService', () => {
           void expect(result.name).toBe(createDto.name);
           void expect(result.email).toBe(createDto.email);
           void expect(result.age).toBe(createDto.age);
-          void expect(mockRepo.create).toHaveBeenCalledWith(createDto);
+          void expect(mockRepo.create.bind(mockRepo)).toHaveBeenCalledWith(
+            createDto,
+          );
         },
       ),
     );
