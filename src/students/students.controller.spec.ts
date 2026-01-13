@@ -4,7 +4,6 @@ import { StudentsService } from './students.service';
 
 describe('StudentsController', () => {
   let controller: StudentsController;
-  let service: StudentsService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -24,7 +23,6 @@ describe('StudentsController', () => {
     }).compile();
 
     controller = module.get<StudentsController>(StudentsController);
-    service = module.get<StudentsService>(StudentsService);
   });
 
   it('학생 findOne get', () => {
