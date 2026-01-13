@@ -15,7 +15,7 @@ jobs:
 
   cd:
     needs: ci
-    runs-on: ubuntu-latest
+    runs-on:
     steps:
       - uses: actions/checkout@v3
       - run: npm install -g @railway/cli
